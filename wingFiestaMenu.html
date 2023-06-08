@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/0246dfd44d.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="shortcut icon"
+      href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBWXrPXE_2M91aX6dHqBT6t467MucpdDNqYg&usqp=CAU"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="wingFiestaMenu.css" />
+    <title>Wing Fiesta Menu</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="nav-container">
+          <div class="logo-title-wrapper">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBWXrPXE_2M91aX6dHqBT6t467MucpdDNqYg&usqp=CAU"
+              alt=""
+              class="home-pg-logo"
+            />
+            <p class="title">Wing Fiesta</p>
+          </div>
+          <div>
+            <ul class="nav-links-wrapper">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Menu</a></li>
+              <li><a href="#">Store</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Franchise</a></li>
+            </ul>
+            <div>
+              <i class="fa-regular fa-bars hamburger-icon"></i>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section>
+        <div class="menu-cta-container">
+          <div class="menu-cta-left-wrapper">
+            <h1 class="cta-title">Try Our All New Ribs!</h1>
+            <img src="ribs.jpeg" alt="" class="cta-ribs-img" />
+          </div>
+          <div class="menu-cta-right-wrapper">
+            <p class="cta-description">
+              4 Unique Flavors <br />
+              Only &dollar;12.99
+            </p>
+            <button class="cta-order-btn">Order Now!</button>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div class="menu-items-container">
+          <div class="menu-box-1">
+            <div class="images-wrapper">
+              <img src="wingflavors.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Wing Flavors</p>
+              <p class="menu-items-desc">
+                WING FLAVORS Teriyaki / Garlic Parmesan <br />
+                Lemon Pepper / Smokey BBQ <br />
+                Original BBQ / Honey BBQ / Spicy BBQ <br />
+                Cajun / Sweet Chilli / Chilli Garlic <br />
+                Spicy Garlic / Mild Spicy <br />
+                Original Spicy / Habanero
+              </p>
+            </div>
+            <dialog class="modal" id="modal">
+              <div class="x-wrapper">
+                <i class="fa-regular fa-xmark close-button"></i>
+              </div>
+              <h2>Wing Flavors</h2>
+              <form action="submit" class="wing-flavors-form" id="form">
+                <div class="WF-flavor-options-wrapper">
+                  <ul>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="WF-inputs wing-flavors-1"
+                        value="1"
+                      />
+                      <label for="wing-flavors-1" id="wing-flavors-options"
+                        >Teriyaki</label
+                      >
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="WF-inputs wing-flavors-2"
+                        value="2"
+                      />
+                      <label for="wing-flavors-2" id="wing-flavors-options"
+                        >Garlic Parmesan</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-3" value="3" />
+                      <label for="wing-flavors-3" id="wing-flavors-options"
+                        >Lemon Pepper</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-4" value="4" />
+                      <label for="wing-flavors-4" id="wing-flavors-options"
+                        >Smokey BBQ</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-5" value="5" />
+                      <label for="wing-flavors-5" id="wing-flavors-options"
+                        >Original BBQ</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-6" value="6" />
+                      <label for="wing-flavors-6" id="wing-flavors-options"
+                        >Honey BBQ</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-7" value="7" />
+                      <label for="wing-flavors-7" id="wing-flavors-options"
+                        >Spicy BBQ</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-8" value="8" />
+                      <label for="wing-flavors-8" id="wing-flavors-options"
+                        >Cajun</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-9" value="9" />
+                      <label for="wing-flavors-9" id="wing-flavors-options"
+                        >Sweet Chilli</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-10" value="10" />
+                      <label for="wing-flavors-10" id="wing-flavors-options"
+                        >Chilli Garlic</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-11" value="11" />
+                      <label for="wing-flavors-11" id="wing-flavors-options"
+                        >Spicy Garlic</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-12" value="12" />
+                      <label for="wing-flavors-12" id="wing-flavors-options"
+                        >Mild Garlic</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-13" value="13" />
+                      <label for="wing-flavors-13" id="wing-flavors-options"
+                        >Original Spicy</label
+                      >
+                    </li>
+                    <li>
+                      <input type="checkbox" id="wing-flavors-14" value="14" />
+                      <label for="wing-flavors-14" id="wing-flavors-options"
+                        >Habanero</label
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <div class="WF-wing-choice-wrapper">
+                  <ul>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="wing-flavors-boneless"
+                        value="15"
+                        class="wing-flavors-choice"
+                      />
+                      <label for="wing-flavors-boneless">Boneless</label>
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="wing-flavors-bonein"
+                        value="16"
+                        class="wing-flavors-choice"
+                      />
+                      <label for="wing-flavors-bonein">Bone-In</label>
+                    </li>
+                  </ul>
+                </div>
+                <div class="WF-order-btn-wrapper">
+                  <input
+                    type="submit"
+                    value="Add to Order"
+                    class="add-to-order-btn"
+                  />
+                </div>
+              </form>
+            </dialog>
+          </div>
+          <div class="menu-box-2">
+            <div class="images-wrapper">
+              <img src="menu-dips.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Rib Flavors</p>
+              <p class="menu-items-desc">
+                Original BBQ / Honey BBQ <br />
+                Smokey BBQ
+              </p>
+            </div>
+          </div>
+          <div class="menu-box-3">
+            <div class="images-wrapper">
+              <img src="ribs.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Dipping Flavors</p>
+              <p class="menu-items-desc">Ranch / Blue Cheese / Honey Mustard</p>
+            </div>
+          </div>
+          <div class="menu-box-4">
+            <div class="images-wrapper">
+              <img src="menu-boneless.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Boneless Wings</p>
+              <p class="menu-items-desc"></p>
+            </div>
+          </div>
+          <div class="menu-box-5">
+            <div class="images-wrapper">
+              <img src="menu-tenders.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Tenders</p>
+              <p class="menu-items-desc"></p>
+            </div>
+          </div>
+          <div class="menu-box-6">
+            <div class="images-wrapper">
+              <img src="menu-jumbowings.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Jumbo Wings</p>
+              <p class="menu-items-desc"></p>
+            </div>
+          </div>
+          <div class="menu-box-7">
+            <div class="images-wrapper">
+              <img src="ribs.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Ribs</p>
+              <p class="menu-items-desc"></p>
+            </div>
+          </div>
+          <div class="menu-box-8">
+            <div class="images-wrapper">
+              <img src="menu-sides.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Fries</p>
+              <p class="menu-items-desc">
+                French Fries <br />
+                Fiesta Fries <br />
+                Rock n Roll <br />
+                Gilroy Fries <br />
+                Italian Fries
+              </p>
+            </div>
+          </div>
+          <div class="menu-box-9">
+            <div class="images-wrapper">
+              <img src="menu-fries.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Sides</p>
+              <p class="menu-items-desc">
+                Mixed Veggie Sticks / Nuggets <br />
+                Fiesta Potato / Baked Potato <br />
+                Baked Beans / Onion Rings <br />
+                Sweet Potato Fries
+              </p>
+            </div>
+          </div>
+          <div class="menu-box-10">
+            <div class="images-wrapper">
+              <img src="menu-drinks.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Drinks</p>
+              <p class="menu-items-desc">
+                Soda / Bottled Drinks <br />
+                Bottled Water / Beer
+              </p>
+            </div>
+          </div>
+          <div class="menu-box-11">
+            <div class="images-wrapper">
+              <img src="menu-party.jpeg" alt="" />
+            </div>
+            <div class="boxes-text-wrapper">
+              <p class="menu-items-titles">Party Packs!</p>
+              <p class="menu-items-desc"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="wingFiestaMenu.js" type="module"></script>
+  </body>
+</html>
