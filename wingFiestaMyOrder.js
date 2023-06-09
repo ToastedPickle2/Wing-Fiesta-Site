@@ -13,6 +13,8 @@ const checkoutOrderCount = document.querySelector('.checkout-btn-item-count');
 const orderTotal = document.querySelectorAll('.order-total');
 const subTotal = document.querySelector('.subtotal');
 const tax = document.querySelector('.tax');
+const orderClear = document.querySelector('.order-clear');
+const data = document.querySelector('.order-items');
 
 mainLogo.addEventListener('click', function () {
   window.location.href = 'wingFiesta.html';
@@ -84,6 +86,7 @@ checkboxes.forEach(checkbox => {
 /* Importing totalOrders array from WingFiestaMenu */
 const jsonCopy = localStorage.getItem('forma');
 const totalOrders = JSON.parse(jsonCopy);
+console.log(totalOrders);
 
 if (totalOrders) {
   console.log(totalOrders);
@@ -102,7 +105,7 @@ console.log(orderPrices);
 const copyOrderPrices = orderPrices;
 
 orderTotal.forEach(item => {
-  item.textContent = `$${orderPrices}`;
+  item.textContent = `$${orderPrices.toFixed(2)}`;
 });
 
 /* Remove or Add Order Count */
@@ -112,27 +115,30 @@ checkoutOrderCount.textContent = count;
 bagOrderCount.textContent = count;
 
 let calculateTax = (7.25 / 100) * orderPrices;
-tax.textContent = `$${calculateTax}`;
+tax.textContent = `$${calculateTax.toFixed(2)}`;
 let copyCalculateTax = calculateTax;
 
-subTotal.textContent = `$${orderPrices - calculateTax}`;
-let test = orderPrices - calculateTax;
+subTotal.textContent = `$${(orderPrices - calculateTax).toFixed(2)}`;
 
-orderPlusBtn.addEventListener('click', function () {
+const plusBtnClick = function () {
   if (count >= 0 && count < 25) {
     count++;
     orderCount.textContent = count;
     checkoutOrderCount.textContent = count;
     bagOrderCount.textContent = count;
-    orderPrices = orderPrices + copyOrderPrices;
+    bagOrderCount.style.display = 'block';
+
+    orderPrices += copyOrderPrices;
     orderTotal.forEach(item => {
-      item.textContent = `$${orderPrices}`;
+      item.textContent = `$${orderPrices.toFixed(2)}`;
     });
 
-    tax.textContent = `$${(calculateTax += copyCalculateTax)}`;
-    subTotal.textContent = `$${orderPrices - calculateTax}`;
+    tax.textContent = `$${(calculateTax += copyCalculateTax).toFixed(2)}`;
+    subTotal.textContent = `$${(orderPrices - calculateTax).toFixed(2)}`;
   }
-});
+};
+
+orderPlusBtn.addEventListener('click', plusBtnClick);
 
 orderMinusBtn.addEventListener('click', function () {
   if (count > 0) {
@@ -140,17 +146,52 @@ orderMinusBtn.addEventListener('click', function () {
     orderCount.textContent = count;
     checkoutOrderCount.textContent = count;
     bagOrderCount.textContent = count;
+
     orderPrices -= copyOrderPrices;
     orderTotal.forEach(item => {
-      item.textContent = `$${orderPrices}`;
+      item.textContent = `$${orderPrices.toFixed(2)}`;
     });
 
     calculateTax = (7.25 / 100) * orderPrices;
     calculateTax - copyCalculateTax;
-    tax.textContent = `$${calculateTax}`;
-    subTotal.textContent -= test;
-    console.log(test);
+    tax.textContent = `$${calculateTax.toFixed(2)}`;
+    subTotal.textContent = `$${(orderPrices - calculateTax).toFixed(2)}`;
+  }
+  if (count === 0) {
+    clearOrder();
   }
 });
 
-// subTotal.textContent = 'hi';
+/* Clear Entire Order */
+const clearOrder = function () {
+  bagOrderCount.style.display = 'none';
+  orderPlusBtn.removeEventListener('click', plusBtnClick);
+  
+  if (data.textContent !== '') {
+    console.log('Hi');
+
+    setTimeout(() => {
+      data.textContent = '';
+      count = 0;
+      orderCount.textContent = 0;
+      orderPrices = 0;
+      orderTotal.forEach(item => {
+        item.textContent = `$${orderPrices.toFixed(2)}`;
+      });
+      calculateTax = 0;
+      tax.textContent = `$${calculateTax.toFixed(2)}`;
+      subTotal.textContent = '$0.00';
+      checkoutOrderCount.textContent = 0;
+    }, 300);
+  }
+};
+orderClear.addEventListener('click', function () {
+  clearOrder();
+});
+
+const form = document.getElementById('form');
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+});
+
+// btnNew.addEventListener('click', initialize); //This is to clear order.
