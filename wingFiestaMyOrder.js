@@ -78,7 +78,7 @@ let orderPrices = JSON.parse(json3);
 orderPrices = orderPrices.reduce((a, b) => a + b);
 console.log(orderPrices);
 
-const copyOrderPrices = orderPrices;
+let copyOrderPrices = orderPrices;
 
 orderTotal.forEach(item => {
   item.textContent = `$${orderPrices.toFixed(2)}`;
@@ -154,6 +154,8 @@ data.addEventListener('click', function (event) {
 });
 
 let plusBtnClick = function () {
+  orderCount = document.querySelectorAll('.order-count');
+
   if (count >= 0 && count < 25) {
     count++;
     console.log(count, 'plus');
@@ -172,11 +174,11 @@ let plusBtnClick = function () {
 
     tax.textContent = `$${(calculateTax += copyCalculateTax).toFixed(2)}`;
     subTotal.textContent = `$${(orderPrices - calculateTax).toFixed(2)}`;
-    orderCount = document.querySelectorAll('.order-count');
+    // orderCount = document.querySelectorAll('.order-count');
   }
 };
 
-const minusBtnClick = function () {
+let minusBtnClick = function () {
   console.log(count, 'Count');
   if (count > 0) {
     count--;
@@ -196,10 +198,15 @@ const minusBtnClick = function () {
     tax.textContent = `$${calculateTax.toFixed(2)}`;
     subTotal.textContent = `$${(orderPrices - calculateTax).toFixed(2)}`;
   }
+
   if (count === 0) {
     clearOrder();
+    orderClear.style.cursor = 'default';
+    orderClear.style.opacity = '50%';
   }
 };
+
+const copyMinusBtnClick = minusBtnClick;
 
 orderPlusBtn.forEach(function (btn) {
   console.log('you');
@@ -212,7 +219,7 @@ orderMinusBtn.forEach(minusBtn => {
 });
 
 /* Clear Entire Order */
-const clearOrder = function () {
+let clearOrder = function () {
   // bagOrderCount.style.display = 'none';
   data.style.paddingLeft = '0rem';
 
@@ -253,7 +260,11 @@ const clearOrder = function () {
 
 orderClear.addEventListener('click', function () {
   clearOrder();
+  orderClear.style.cursor = 'default';
+  orderClear.style.opacity = '50%';
 });
+
+let copyClearOder = clearOrder;
 
 /* Submit Order */
 const form = document.getElementById('form');
@@ -272,94 +283,174 @@ let copyAddOnPriceNumArr = [];
 
 let addOnSum;
 
+let abc;
 addBtns.forEach(function (addBtn) {
   addBtn.addEventListener('click', function () {
-    const card = addBtn.closest('.add-on-cards');
-    const paragraphs = card.querySelectorAll('.add-ons-info-wrapper p');
+    if (!addBtn.classList.contains('clicked') /*&& count > 0*/) {
+      const card = addBtn.closest('.add-on-cards');
+      const paragraphs = card.querySelectorAll('.add-ons-info-wrapper p');
 
-    for (let i = 0; i < 2 && i < paragraphs.length; i++) {
-      const clonedParagraph = paragraphs[i].cloneNode(true);
-      const addOnsTextContent = clonedParagraph.textContent;
-      addOnsArray.push(addOnsTextContent);
-      console.log(addOnsArray);
-    }
-
-    let addOnItem = addOnsArray[addOnsArray.length - 2];
-    let addOnPrice = addOnsArray[addOnsArray.length - 1];
-
-    let addOnsCount = 1;
-    const markup = `
-    <div class="js-add-ons-container">
-      <div>
-        <span class="js-add-on-items">${addOnItem}</span>
-        <span>(${addOnPrice})</span>
-      </div>
-      <div class="js-add-ons-btns-wrapper">
-        <button class="js-add-ons-count-btns js-add-ons-minus">&minus;</button>
-        <span class="js-add-ons-count">${addOnsCount}</span>
-        <button class="js-add-ons-count-btns js-add-ons-plus">&plus;</button>
-      </div>
-    </div>`;
-
-    // Updating SubTotal, Tax, and Total after adding Add-ons
-    let regex = /[0-9]/;
-    let result = [];
-    for (const x of addOnPrice) {
-      if (regex.test(x)) {
-        result.push(x);
+      if (count === 0) {
+        data.textContent = '';
+        orderClear.style.opacity = '100%';
+        orderClear.style.cursor = 'pointer';
       }
+      for (let i = 0; i < 2 && i < paragraphs.length; i++) {
+        const clonedParagraph = paragraphs[i].cloneNode(true);
+        const addOnsTextContent = clonedParagraph.textContent;
+        addOnsArray.push(addOnsTextContent);
+        console.log(addOnsArray);
+      }
+
+      let addOnItem = addOnsArray[addOnsArray.length - 2];
+      let addOnPrice = addOnsArray[addOnsArray.length - 1];
+
+      console.log(addOnPrice, 'addonPrice');
+
+      let addOnsCount = 1;
+      // let addOnsCount = 0;
+      let copyCount = count;
+
+      // addOnsCount++;
+      bagOrderCount.textContent = count += addOnsCount;
+      checkoutOrderCount.textContent = copyCount += addOnsCount;
+
+      const markup = `
+      <div class="js-add-ons-container">
+        <div>
+          <span class="js-add-on-items">${addOnItem}</span>
+          <span>(${addOnPrice})</span>
+        </div>
+        <div class="js-add-ons-btns-wrapper">
+          <button class="js-add-ons-count-btns js-add-ons-minus">&minus;</button>
+          <span class="js-add-ons-count">${addOnsCount}</span>
+          <button class="js-add-ons-count-btns js-add-ons-plus">&plus;</button>
+        </div>
+      </div>`;
+
+      // Updating SubTotal, Tax, and Total after adding Add-ons
+      let regex = /[0-9]/;
+      let result = [];
+      for (const x of addOnPrice) {
+        if (regex.test(x)) {
+          result.push(x);
+        }
+      }
+
+      addOnPriceNum = Number(result[0] + '.' + result[1] + result[2]);
+      console.log(addOnPriceNum, 't');
+
+      let currentTotal;
+      orderTotal.forEach(item => {
+        currentTotal = Number(item.textContent.replace('$', ''));
+        newTotal = currentTotal + addOnPriceNum;
+        addOnPriceNumArr.push(addOnPriceNum);
+        orderPrices = newTotal;
+        item.textContent = `$${orderPrices.toFixed(2)}`;
+      });
+
+      copyAddOnPriceNumArr.push(addOnPriceNum);
+
+      addOnSum = copyAddOnPriceNumArr.reduce((a, b) => a + b);
+
+      const addOnTax = ((7.25 / 100) * newTotal).toFixed(2);
+      tax.textContent = `$${addOnTax}`;
+      subTotal.textContent = `$${(newTotal - addOnTax).toFixed(2)}`;
+
+      setTimeout(() => {
+        data.innerHTML += markup;
+
+        const addOnsPlusBtns = document.querySelectorAll('.js-add-ons-plus');
+        const addOnsMinusBtns = document.querySelectorAll('.js-add-ons-minus');
+        const addOnsCountEls = document.querySelectorAll('.js-add-ons-count');
+
+        addOnsPlusBtns.forEach(function (addOnsPlusBtn) {
+          addOnsPlusBtn.addEventListener('click', function () {
+            const index = Array.from(addOnsPlusBtns).indexOf(addOnsPlusBtn);
+            if (addOnsCount < 5) {
+              addOnsCount++;
+              const copyCount = count - 1;
+              const copyCount2 = count - 1;
+              bagOrderCount.textContent = copyCount + addOnsCount;
+              checkoutOrderCount.textContent = copyCount2 + addOnsCount;
+
+              addOnsCountEls[index].textContent = addOnsCount;
+              console.log(addOnPrice, 'TEST');
+
+              let currentTotal;
+              orderTotal.forEach(item => {
+                currentTotal = Number(item.textContent.replace('$', ''));
+                orderPrices = currentTotal + addOnPriceNum;
+                item.textContent = `$${orderPrices.toFixed(2)}`;
+              });
+            }
+          });
+        });
+
+        addOnsMinusBtns.forEach(function (addOnsMinusBtn) {
+          addOnsMinusBtn.addEventListener('click', function () {
+            const index = Array.from(addOnsMinusBtns).indexOf(addOnsMinusBtn);
+            if (addOnsCount > 0) {
+              addOnsCount--;
+              console.log('Minus', index);
+              addOnsCountEls[index].textContent = addOnsCount;
+
+              abc = addOnsCount;
+              console.log(abc);
+
+              let currentTotal;
+              orderTotal.forEach(item => {
+                currentTotal = Number(item.textContent.replace('$', ''));
+                orderPrices = currentTotal - addOnPriceNum;
+                item.textContent = `$${orderPrices.toFixed(2)}`;
+              });
+            }
+            if (addOnsCount === 0) {
+              document.querySelectorAll('.js-add-ons-container')[
+                index
+              ].style.display = 'none';
+            }
+            console.log(addOnsCount, 'DOOO');
+            if (addOnsCount <= 0) {
+              addBtn.classList.remove('clicked');
+              addBtn.style.opacity = '100%';
+              addBtn.classList.remove('disable-hover');
+              addBtn.style.cursor = 'pointer';
+            }
+            if (addOnsCount <= 0 && count <= 0) {
+              clearOrder();
+            }
+          });
+        });
+      }, 200);
+      // abc = addOnsCount;
+      addBtn.classList.add('clicked');
+      addBtn.style.cursor = 'default';
+      addBtn.classList.add('disable-hover');
+      addBtn.style.opacity = '50%';
     }
-
-    addOnPriceNum = Number(result[0] + '.' + result[1] + result[2]);
-    console.log(addOnPriceNum, 't');
-
-    orderTotal.forEach(item => {
-      const currentTotal = Number(item.textContent.replace('$', ''));
-      newTotal = currentTotal + addOnPriceNum;
-      addOnPriceNumArr.push(addOnPriceNum);
-      orderPrices = newTotal;
-      item.textContent = `$${orderPrices.toFixed(2)}`;
-    });
-
-    copyAddOnPriceNumArr.push(addOnPriceNum);
-
-    addOnSum = copyAddOnPriceNumArr.reduce((a, b) => a + b);
-
-    const addOnTax = ((7.25 / 100) * newTotal).toFixed(2);
-    tax.textContent = `$${addOnTax}`;
-    subTotal.textContent = `$${(newTotal - addOnTax).toFixed(2)}`;
-
-    setTimeout(() => {
-      data.innerHTML += markup;
-
-      const addOnsPlusBtns = document.querySelectorAll('.js-add-ons-plus');
-      const addOnsMinusBtns = document.querySelectorAll('.js-add-ons-minus');
-      const addOnsCountEls = document.querySelectorAll('.js-add-ons-count');
-
-      addOnsPlusBtns.forEach(function (addOnsPlusBtn) {
-        addOnsPlusBtn.addEventListener('click', function () {
-          const index = Array.from(addOnsPlusBtns).indexOf(addOnsPlusBtn);
-          if (addOnsCount < 5) {
-            addOnsCount++;
-            console.log('Plus', index);
-            addOnsCountEls[index].textContent = addOnsCount;
-          }
-        });
-      });
-
-      addOnsMinusBtns.forEach(function (addOnsMinusBtn) {
-        addOnsMinusBtn.addEventListener('click', function () {
-          const index = Array.from(addOnsMinusBtns).indexOf(addOnsMinusBtn);
-          if (addOnsCount > 0) {
-            addOnsCount--;
-            console.log('Minus', index);
-            addOnsCountEls[index].textContent = addOnsCount;
-          }
-        });
-      });
-    }, 200);
   });
 });
+
+minusBtnClick = function () {
+  copyMinusBtnClick();
+
+  if (count === 0 && abc <= 0) {
+    clearOrder();
+    orderClear.style.cursor = 'default';
+    orderClear.style.opacity = '50%';
+  }
+};
+
+clearOrder = function () {
+  copyClearOder();
+  addBtns.forEach(item => {
+    item.classList.remove('clicked');
+    item.style.opacity = '100%';
+    item.classList.remove('disable-hover');
+    item.style.cursor = 'pointer';
+  });
+};
 
 // let updatedTotal;
 // let copyUpdatedTotal;
