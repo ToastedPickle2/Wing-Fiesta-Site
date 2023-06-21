@@ -294,6 +294,7 @@ addBtns.forEach(function (addBtn) {
         data.textContent = '';
         orderClear.style.opacity = '100%';
         orderClear.style.cursor = 'pointer';
+        bagOrderCount.style.display = 'block';
       }
       for (let i = 0; i < 2 && i < paragraphs.length; i++) {
         const clonedParagraph = paragraphs[i].cloneNode(true);
@@ -364,6 +365,7 @@ addBtns.forEach(function (addBtn) {
         const addOnsMinusBtns = document.querySelectorAll('.js-add-ons-minus');
         const addOnsCountEls = document.querySelectorAll('.js-add-ons-count');
 
+        let tCount;
         addOnsPlusBtns.forEach(function (addOnsPlusBtn) {
           addOnsPlusBtn.addEventListener('click', function () {
             const index = Array.from(addOnsPlusBtns).indexOf(addOnsPlusBtn);
@@ -395,16 +397,32 @@ addBtns.forEach(function (addBtn) {
               console.log('Minus', index);
               addOnsCountEls[index].textContent = addOnsCount;
 
+              const copyCount = count - 1;
+              const copyCount2 = count - 1;
+              console.log(count, 'COUNT');
+              bagOrderCount.textContent = copyCount - addOnsCount;
+              checkoutOrderCount.textContent = copyCount2 - addOnsCount;
+
               abc = addOnsCount;
               console.log(abc);
 
-              let currentTotal;
-              orderTotal.forEach(item => {
-                currentTotal = Number(item.textContent.replace('$', ''));
-                orderPrices = currentTotal - addOnPriceNum;
-                item.textContent = `$${orderPrices.toFixed(2)}`;
-              });
+              // let currentTotal;
+              // orderTotal.forEach(item => {
+              //   currentTotal = Number(item.textContent.replace('$', ''));
+              //   orderPrices = currentTotal - addOnPriceNum;
+              //   item.textContent = `$${orderPrices.toFixed(2)}`;
+              //   console.log(addOnsCount, 'add ons count');
+              // });
             }
+            let currentTotal;
+            orderTotal.forEach(item => {
+              currentTotal = Number(item.textContent.replace('$', ''));
+              orderPrices = currentTotal - addOnPriceNum;
+              console.log(addOnPriceNum, 'FRES');
+              item.textContent = `$${orderPrices.toFixed(2)}`;
+              console.log(addOnsCount, 'add ons count');
+            });
+
             if (addOnsCount === 0) {
               document.querySelectorAll('.js-add-ons-container')[
                 index
@@ -412,10 +430,12 @@ addBtns.forEach(function (addBtn) {
             }
             console.log(addOnsCount, 'DOOO');
             if (addOnsCount <= 0) {
-              addBtn.classList.remove('clicked');
-              addBtn.style.opacity = '100%';
-              addBtn.classList.remove('disable-hover');
-              addBtn.style.cursor = 'pointer';
+              addBtns.forEach(item => {
+                item.classList.remove('clicked');
+                item.style.opacity = '100%';
+                item.classList.remove('disable-hover');
+                item.style.cursor = 'pointer';
+              });
             }
             if (addOnsCount <= 0 && count <= 0) {
               clearOrder();
