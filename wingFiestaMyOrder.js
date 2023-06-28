@@ -89,6 +89,9 @@ let order = getFlavorsDescription(arr);
 order = order.reverse();
 
 let count = totalOrders.length;
+localStorage.setItem('mainOrderCount', count);
+let mainItemsCount = Number(localStorage.getItem('mainOrderCount'));
+
 orderCount.forEach(item => {
   item.textContent = count;
 });
@@ -176,12 +179,19 @@ let plusBtnClick = function () {
     subTotal.textContent = `$${(orderPrices - calculateTax).toFixed(2)}`;
     // orderCount = document.querySelectorAll('.order-count');
   }
+
+  localStorage.setItem('mainOrderCount', count);
+  mainItemsCountFn();
 };
+
+let copyPlusBtnClick = plusBtnClick;
 
 let minusBtnClick = function () {
   console.log(count, 'Count');
+
   if (count > 0) {
     count--;
+
     orderCount.forEach(item => {
       item.textContent = count;
     });
@@ -199,12 +209,23 @@ let minusBtnClick = function () {
     subTotal.textContent = `$${(orderPrices - calculateTax).toFixed(2)}`;
   }
 
-  if (count === 0) {
-    clearOrder();
-    orderClear.style.cursor = 'default';
-    orderClear.style.opacity = '50%';
-  }
+  // if (count === 0) {
+  //   clearOrder();
+  //   orderClear.style.cursor = 'default';
+  //   orderClear.style.opacity = '50%';
+  // }
+
+  localStorage.setItem('mainOrderCount', count);
+  mainItemsCountFn();
 };
+
+function mainItemsCountFn() {
+  let mainItemsCount = Number(localStorage.getItem('mainOrderCount'));
+
+  localStorage.setItem('mainOrderCount', mainItemsCount);
+
+  console.log(mainItemsCount);
+}
 
 const copyMinusBtnClick = minusBtnClick;
 
@@ -272,186 +293,6 @@ form.addEventListener('submit', function (event) {
   event.preventDefault();
 });
 
-/* Add add-on items to order */
-const addBtns = document.querySelectorAll('.add-ons-cards-btns');
-let addOnsArray = [];
-let newTotal;
-let addOnPriceNum;
-
-let addOnPriceNumArr = [];
-let copyAddOnPriceNumArr = [];
-
-let addOnSum;
-
-let abc;
-addBtns.forEach(function (addBtn) {
-  addBtn.addEventListener('click', function () {
-    if (!addBtn.classList.contains('clicked') /*&& count > 0*/) {
-      const card = addBtn.closest('.add-on-cards');
-      const paragraphs = card.querySelectorAll('.add-ons-info-wrapper p');
-
-      if (count === 0) {
-        data.textContent = '';
-        orderClear.style.opacity = '100%';
-        orderClear.style.cursor = 'pointer';
-        bagOrderCount.style.display = 'block';
-      }
-      for (let i = 0; i < 2 && i < paragraphs.length; i++) {
-        const clonedParagraph = paragraphs[i].cloneNode(true);
-        const addOnsTextContent = clonedParagraph.textContent;
-        addOnsArray.push(addOnsTextContent);
-        console.log(addOnsArray);
-      }
-
-      let addOnItem = addOnsArray[addOnsArray.length - 2];
-      let addOnPrice = addOnsArray[addOnsArray.length - 1];
-
-      console.log(addOnPrice, 'addonPrice');
-
-      let addOnsCount = 1;
-      // let addOnsCount = 0;
-      let copyCount = count;
-
-      // addOnsCount++;
-      bagOrderCount.textContent = count += addOnsCount;
-      checkoutOrderCount.textContent = copyCount += addOnsCount;
-
-      const markup = `
-      <div class="js-add-ons-container">
-        <div>
-          <span class="js-add-on-items">${addOnItem}</span>
-          <span>(${addOnPrice})</span>
-        </div>
-        <div class="js-add-ons-btns-wrapper">
-          <button class="js-add-ons-count-btns js-add-ons-minus">&minus;</button>
-          <span class="js-add-ons-count">${addOnsCount}</span>
-          <button class="js-add-ons-count-btns js-add-ons-plus">&plus;</button>
-        </div>
-      </div>`;
-
-      // Updating SubTotal, Tax, and Total after adding Add-ons
-      let regex = /[0-9]/;
-      let result = [];
-      for (const x of addOnPrice) {
-        if (regex.test(x)) {
-          result.push(x);
-        }
-      }
-
-      addOnPriceNum = Number(result[0] + '.' + result[1] + result[2]);
-      console.log(addOnPriceNum, 't');
-
-      let currentTotal;
-      orderTotal.forEach(item => {
-        currentTotal = Number(item.textContent.replace('$', ''));
-        newTotal = currentTotal + addOnPriceNum;
-        addOnPriceNumArr.push(addOnPriceNum);
-        orderPrices = newTotal;
-        item.textContent = `$${orderPrices.toFixed(2)}`;
-      });
-
-      copyAddOnPriceNumArr.push(addOnPriceNum);
-
-      addOnSum = copyAddOnPriceNumArr.reduce((a, b) => a + b);
-
-      const addOnTax = ((7.25 / 100) * newTotal).toFixed(2);
-      tax.textContent = `$${addOnTax}`;
-      subTotal.textContent = `$${(newTotal - addOnTax).toFixed(2)}`;
-
-      setTimeout(() => {
-        data.innerHTML += markup;
-
-        const addOnsPlusBtns = document.querySelectorAll('.js-add-ons-plus');
-        const addOnsMinusBtns = document.querySelectorAll('.js-add-ons-minus');
-        const addOnsCountEls = document.querySelectorAll('.js-add-ons-count');
-
-        let tCount;
-        addOnsPlusBtns.forEach(function (addOnsPlusBtn) {
-          addOnsPlusBtn.addEventListener('click', function () {
-            const index = Array.from(addOnsPlusBtns).indexOf(addOnsPlusBtn);
-            if (addOnsCount < 5) {
-              addOnsCount++;
-              const copyCount = count - 1;
-              const copyCount2 = count - 1;
-              bagOrderCount.textContent = copyCount + addOnsCount;
-              checkoutOrderCount.textContent = copyCount2 + addOnsCount;
-
-              addOnsCountEls[index].textContent = addOnsCount;
-              console.log(addOnPrice, 'TEST');
-
-              let currentTotal;
-              orderTotal.forEach(item => {
-                currentTotal = Number(item.textContent.replace('$', ''));
-                orderPrices = currentTotal + addOnPriceNum;
-                item.textContent = `$${orderPrices.toFixed(2)}`;
-              });
-            }
-          });
-        });
-
-        addOnsMinusBtns.forEach(function (addOnsMinusBtn) {
-          addOnsMinusBtn.addEventListener('click', function () {
-            const index = Array.from(addOnsMinusBtns).indexOf(addOnsMinusBtn);
-            if (addOnsCount > 0) {
-              addOnsCount--;
-              console.log('Minus', index);
-              addOnsCountEls[index].textContent = addOnsCount;
-
-              const copyCount = count - 1;
-              const copyCount2 = count - 1;
-              console.log(count, 'COUNT');
-              bagOrderCount.textContent = copyCount - addOnsCount;
-              checkoutOrderCount.textContent = copyCount2 - addOnsCount;
-
-              abc = addOnsCount;
-              console.log(abc);
-
-              // let currentTotal;
-              // orderTotal.forEach(item => {
-              //   currentTotal = Number(item.textContent.replace('$', ''));
-              //   orderPrices = currentTotal - addOnPriceNum;
-              //   item.textContent = `$${orderPrices.toFixed(2)}`;
-              //   console.log(addOnsCount, 'add ons count');
-              // });
-            }
-            let currentTotal;
-            orderTotal.forEach(item => {
-              currentTotal = Number(item.textContent.replace('$', ''));
-              orderPrices = currentTotal - addOnPriceNum;
-              console.log(addOnPriceNum, 'FRES');
-              item.textContent = `$${orderPrices.toFixed(2)}`;
-              console.log(addOnsCount, 'add ons count');
-            });
-
-            if (addOnsCount === 0) {
-              document.querySelectorAll('.js-add-ons-container')[
-                index
-              ].style.display = 'none';
-            }
-            console.log(addOnsCount, 'DOOO');
-            if (addOnsCount <= 0) {
-              addBtns.forEach(item => {
-                item.classList.remove('clicked');
-                item.style.opacity = '100%';
-                item.classList.remove('disable-hover');
-                item.style.cursor = 'pointer';
-              });
-            }
-            if (addOnsCount <= 0 && count <= 0) {
-              clearOrder();
-            }
-          });
-        });
-      }, 200);
-      // abc = addOnsCount;
-      addBtn.classList.add('clicked');
-      addBtn.style.cursor = 'default';
-      addBtn.classList.add('disable-hover');
-      addBtn.style.opacity = '50%';
-    }
-  });
-});
-
 minusBtnClick = function () {
   copyMinusBtnClick();
 
@@ -472,87 +313,232 @@ clearOrder = function () {
   });
 };
 
-// let updatedTotal;
-// let copyUpdatedTotal;
+/* Add add-on items to order */
+const addBtns = document.querySelectorAll('.add-ons-cards-btns');
+let addOnsArray = [];
+let newTotal;
+let addOnPriceNum;
 
-// orderPlusBtn.forEach(btn => {
-//   btn.addEventListener('click', function () {
-//     let addOnPriceNumSet = new Set(addOnPriceNumArr);
+let addOnPriceNumArr = [];
+let copyAddOnPriceNumArr = [];
 
-//     if (count > 0) {
-//       let arrCopy = [...addOnPriceNumSet];
-//       let result = 0;
-//       for (const x of arrCopy) {
-//         result += x;
-//       }
-//       console.log(result);
-//       updatedTotal = Number(
-//         (copyOrderPrices * count + result * count).toFixed(2)
-//       );
+let addOnSum;
+let abc;
 
-//       copyUpdatedTotal = updatedTotal;
-//       orderTotal.forEach(item => {
-//         item.textContent = `$${updatedTotal.toFixed(2)}`;
-//       });
-//       console.log(updatedTotal);
-//     }
-//   });
+//----------------------------------------------------------//
 
-//   orderMinusBtn.forEach(btn => {
-//     btn.addEventListener('click', function () {
-//       if (count > 0) {
-//         let addOnPriceNumSet = new Set(addOnPriceNumArr);
+// const card = addBtn.closest('.add-on-cards');
+// const paragraphs = card.querySelectorAll('.add-ons-info-wrapper p');
 
-//         console.log(copyAddOnPriceNumArr, 'YYOOOO');
-//         console.log(copyAddOnPriceNumArr.length, 'length');
+let addOns = [
+  {
+    name: '3 Ribs',
+    tag: 'ribs',
+    price: 6,
+    inCart: 0,
+  },
+  {
+    name: 'Sweet Iced Tea',
+    tag: 'icedtea',
+    price: 3,
+    inCart: 0,
+  },
+  {
+    name: '2 Pcs Tenders',
+    tag: 'tenders',
+    price: 5,
+    inCart: 0,
+  },
+  {
+    name: 'Garlic Fries',
+    tag: 'garlicfries',
+    price: 7,
+    inCart: 0,
+  },
+  {
+    name: '1 Liter Coke',
+    tag: 'coke',
+    price: 4,
+    inCart: 0,
+  },
+  {
+    name: 'Cheese Sauce',
+    tag: 'cheesesauce',
+    price: 1,
+    inCart: 0,
+  },
+];
 
-//         console.log(addOnSum, 'addOnSum');
-//         console.log(updatedTotal - addOnSum, 'UP UP');
-//         console.log(copyOrderPrices, 'Ovo');
+function addOnsNumbers(addOns) {
+  console.log('The food added is', addOns);
+  addOns.inCart = 1;
+  const markup = `
+  <div class="js-add-ons-container">
+    <div>
+      <span class="js-add-on-items">${addOns.name}</span>
+      <span>($${addOns.price.toFixed(2)})</span>
+    </div>
+    <div class="js-add-ons-btns-wrapper">
+      <button class="js-add-ons-count-btns js-add-ons-minus">&minus;</button>
+      <span class="js-add-ons-count">${addOns.inCart}</span>
+      <button class="js-add-ons-count-btns js-add-ons-plus">&plus;</button>
+    </div>
+  </div>`;
+  data.innerHTML += markup;
 
-//         let arrCopy = [...addOnPriceNumSet];
+  let addOnsCount = Number(localStorage.getItem('addOnsNumbers'));
+  let mainItemsCount = Number(localStorage.getItem('mainOrderCount'));
 
-//         let result = 0;
-//         arrCopy.forEach(x => {
-//           result += x;
-//         });
+  if (addOnsCount) {
+    localStorage.setItem('addOnsNumbers', addOnsCount + 1);
+    console.log(addOnsCount);
+    console.log(count);
+    // checkoutOrderCount.textContent = mainItemsCount += 1;
+    // checkoutOrderCount.textContent = mainItemsCount += addOnsCount;
+  } else {
+    localStorage.setItem('addOnsNumbers', 1);
+    // checkoutOrderCount.textContent = mainItemsCount + addOnsCount;
+  }
 
-//         updatedTotal = Number(
-//           (copyOrderPrices * count + result * count).toFixed(2)
-//         );
+  const addOnsPlusBtns = document.querySelectorAll('.js-add-ons-plus');
+  const addOnsMinusBtns = document.querySelectorAll('.js-add-ons-minus');
 
-//         console.log(updatedTotal, 'updatedTotal');
-//         console.log((copyUpdatedTotal -= updatedTotal), 'OO');
-//         orderTotal.forEach(item => {
-//           item.textContent = `$${updatedTotal.toFixed(2)}`;
-//         });
+  let tt = 1;
+  addOnsPlusBtns.forEach(function (addOnsPlusBtn) {
+    addOnsPlusBtn.addEventListener('click', function () {
+      let addOnsCount = Number(localStorage.getItem('addOnsNumbers'));
 
-//         console.log(copyUpdatedTotal, 'SIXX');
-//       }
-//     });
-//   });
+      addOnsCount += 1;
 
-//   orderPlusBtn.forEach(btn => {
-//     btn.addEventListener('click', function () {
-//       if (count >= 0 && count < 25) {
-//         count++;
-//         // orderCount.textContent = count;
-//         orderCount.forEach(item => {
-//           item.textContent = count;
-//         });
-//         checkoutOrderCount.textContent = count;
-//         bagOrderCount.textContent = count;
-//         bagOrderCount.style.display = 'block';
+      addOns.inCart += 1;
+      console.log(addOns);
 
-//         orderPrices += copyOrderPrices;
+      localStorage.setItem('addOnsNumbers', addOnsCount);
 
-//         orderTotal.forEach(item => {
-//           item.textContent = `$${orderPrices.toFixed(2)}`;
-//         });
+      let addOnsCountElement =
+        this.parentElement.querySelector('.js-add-ons-count');
+      let currentCount = parseInt(addOnsCountElement.textContent);
+      addOnsCountElement.textContent = currentCount + 1;
+      tt++;
+      console.log(tt, 'AN');
 
-//         tax.textContent = `$${(calculateTax += copyCalculateTax).toFixed(2)}`;
-//         subTotal.textContent = `$${(orderPrices - calculateTax).toFixed(2)}`;
-//       }
-//     });
-//   });
-// });
+      // Update the total count
+      checkOutTotalCount();
+    });
+  });
+
+  addOnsMinusBtns.forEach(function (addOnsMinusBtn) {
+    addOnsMinusBtn.addEventListener('click', function () {
+      let addOnsCount = Number(localStorage.getItem('addOnsNumbers'));
+
+      addOnsCount -= 1;
+
+      addOns.inCart -= 1;
+      console.log(addOns);
+
+      // if (addOns.inCart === 0) {
+      //   document.querySelectorAll('.js-add-ons-container').forEach(item => {
+      //     item.style.backgroundColor = 'red';
+      //     console.log('YAYAUUU');
+      //   });
+      // }
+
+      localStorage.setItem('addOnsNumbers', addOnsCount);
+
+      let addOnsCountElement =
+        this.parentElement.querySelector('.js-add-ons-count');
+      let currentCount = parseInt(addOnsCountElement.textContent);
+      addOnsCountElement.textContent = currentCount - 1;
+
+      tt--;
+      console.log(tt, 'AN');
+      if (tt === 0) {
+        this.parentElement.parentElement.style.display = 'none';
+        // document.querySelectorAll('.js-add-ons-container').forEach(item => {
+        //   item.style.backgroundColor = 'red';
+        //   console.log('YAYAUUU');
+        // });
+      }
+
+      // -------------------- try to figure out how to only have this happen for the addOnCount that is clicked. When two add ons are added and one of them is zero they're both changed
+      if (tt <= 0) {
+        addBtns.forEach(item => {
+          item.classList.remove('clicked');
+          item.style.opacity = '100%';
+          item.classList.remove('disable-hover');
+          item.style.cursor = 'pointer';
+          item.addEventListener('click', clickHandler);
+          document.querySelectorAll('.js-add-ons-container').forEach(item => {
+            item.style.display = 'none';
+          });
+        });
+      }
+      // Update the total count
+      checkOutTotalCount();
+    });
+  });
+}
+
+let clickHandler;
+for (let i = 0; i < addBtns.length; i++) {
+  clickHandler = () => {
+    // addOnsNumbers(addOns[i]);
+    // checkOutTotalCount();
+
+    if (!addBtns[i].classList.contains('clicked')) {
+      addBtns[i].classList.add('clicked');
+      addBtns[i].style.cursor = 'default';
+      addBtns[i].classList.add('disable-hover');
+      addBtns[i].style.opacity = '50%';
+      console.log(addOns[i], 'UUU');
+
+      addOns[i].inCart = 1;
+      addOnsNumbers(addOns[i]);
+
+      // if (addOns[i].inCart === 0) {
+      //   document.querySelectorAll('.js-add-ons-container').forEach(item => {
+      //     item.style.display = 'none';
+      //     console.log('YAYAUUU');
+      //   });
+      // }
+
+      checkOutTotalCount();
+      // cartNumbers();
+      // Remove the event listener
+      addBtns[i].removeEventListener('click', clickHandler);
+    }
+  };
+
+  // Attach the event listener
+  addBtns[i].addEventListener('click', clickHandler);
+}
+
+plusBtnClick = function () {
+  copyPlusBtnClick();
+  checkOutTotalCount();
+};
+
+minusBtnClick = function () {
+  let addOnsCount = Number(localStorage.getItem('addOnsNumbers'));
+  let mainItemsCount = Number(localStorage.getItem('mainOrderCount'));
+
+  if (mainItemsCount <= 1 && addOnsCount === 0) {
+    clearOrder();
+    orderClear.style.cursor = 'default';
+    orderClear.style.opacity = '50%';
+  }
+
+  copyMinusBtnClick();
+  checkOutTotalCount();
+};
+
+function checkOutTotalCount() {
+  let mainItemsCount = Number(localStorage.getItem('mainOrderCount'));
+  let addOnsCount = Number(localStorage.getItem('addOnsNumbers'));
+  const totalCount = addOnsCount + mainItemsCount;
+  localStorage.setItem('totalCount', totalCount);
+  checkoutOrderCount.textContent = totalCount;
+}
+checkOutTotalCount();
+
+//----------------------------------------------------------//
